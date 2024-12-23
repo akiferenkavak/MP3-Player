@@ -8,6 +8,7 @@ typedef struct {
     GtkWidget *main_window;
     GtkWidget *play_button;
     GtkWidget *stop_button;
+    GtkWidget *next_button; //for next song
     Player *player;
 } UI;
 
