@@ -11,10 +11,11 @@ static void on_stop_button_clicked(GtkWidget *button, gpointer user_data) {
     player_stop(player);
 }
 
-static void on_next_button_clicked(tkWidget *button, gpointer user_data) {
+static void on_next_button_clicked(GtkWidget *button, gpointer user_data) {
     Player *player = (Player *)user_data;
 
-    playlist_get_next_song(player->playlist)
+    playlist_get_next_song(player->playlist);
+    player_stop(player);
     player_play(player);
 }
 
@@ -47,7 +48,7 @@ void ui_set_player(UI *ui, Player *player) {
 
     g_signal_connect(ui->play_button, "clicked", G_CALLBACK(on_play_button_clicked), player);
     g_signal_connect(ui->stop_button, "clicked", G_CALLBACK(on_stop_button_clicked), player);
-    g_signal_connect(ui->stop_button, "clicked", G_CALLBACK(on_next_button_clicked), player);
+    g_signal_connect(ui->next_button, "clicked", G_CALLBACK(on_next_button_clicked), player);
 }
 
 void ui_show(UI *ui) {

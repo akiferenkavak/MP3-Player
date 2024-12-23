@@ -11,6 +11,8 @@ int main(int argc, char *argv[]) {
 
     Playlist *playlist = playlist_new();
     playlist_add_song(playlist, "file:///home/vboxuser/Downloads/song1.mp3");
+    playlist_add_song(playlist, "file:///home/vboxuser/Downloads/song2.mp3");
+    playlist_add_song(playlist, "file:///home/vboxuser/Downloads/song3.mp3");
 
     Player *player = player_new();
     player_set_playlist(player, playlist);
