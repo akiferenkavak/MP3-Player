@@ -34,6 +34,7 @@ void player_stop(Player *player) {
 }
 
 void player_next(Player *player) {
+    gst_element_set_state(player->pipeline, GST_STATE_NULL);
     const char *next_song = playlist_get_next_song(player->playlist);
     g_object_set(player->pipeline, "uri", next_song, NULL);
     gst_element_set_state(player->pipeline, GST_STATE_PLAYING);
