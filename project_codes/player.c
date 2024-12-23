@@ -1,13 +1,18 @@
-
-#include <gst/gst.h>
-#include <stdlib.h>
 #include "player.h"
-
-static GstElement *pipeline = NULL;
+#include <gst/gst.h>
 
 Player* player_new() {
     Player *player = malloc(sizeof(Player));
-    player->playlist = NULL;
+    if (!player) {
+        g_printerr("Failed to allocate memory for Player\n");
+        return NULL;
+    }
+    player->pipeline = gst_element_factory_make("playbin", "playbin");
+    if (!player->pipeline) {
+        g_printerr("Failed to create pipeline\n");
+        free(player);
+        return NULL;
+    }
     player->is_playing = FALSE;
     return player;
 }
@@ -17,29 +22,25 @@ void player_set_playlist(Player *player, Playlist *playlist) {
 }
 
 void player_play(Player *player) {
-    if (!pipeline) {
-        pipeline = gst_element_factory_make("playbin", "playbin");
-    }
-
     const char *current_song = playlist_get_current_song(player->playlist);
-    if (current_song) {
-        g_object_set(pipeline, "uri", current_song, NULL);
-        gst_element_set_state(pipeline, GST_STATE_PLAYING);
-        player->is_playing = TRUE;
-    }
+    g_object_set(player->pipeline, "uri", current_song, NULL);
+    gst_element_set_state(player->pipeline, GST_STATE_PLAYING);
+    player->is_playing = TRUE;
 }
 
 void player_stop(Player *player) {
-    if (pipeline) {
-        gst_element_set_state(pipeline, GST_STATE_NULL);
-        player->is_playing = FALSE;
-    }
+    gst_element_set_state(player->pipeline, GST_STATE_NULL);
+    player->is_playing = FALSE;
+}
+
+void player_next(Player *player) {
+    const char *next_song = playlist_get_next_song(player->playlist);
+    g_object_set(player->pipeline, "uri", next_song, NULL);
+    gst_element_set_state(player->pipeline, GST_STATE_PLAYING);
+    player->is_playing = TRUE;
 }
 
 void player_free(Player *player) {
-    if (pipeline) {
-        gst_element_set_state(pipeline, GST_STATE_NULL);
-        gst_object_unref(pipeline);
-    }
+    gst_object_unref(player->pipeline);
     free(player);
 }

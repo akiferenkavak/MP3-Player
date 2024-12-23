@@ -1,4 +1,3 @@
-
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 #include "ui.h"
@@ -20,12 +19,11 @@ int main(int argc, char *argv[]) {
     UI *ui = ui_new();
     ui_set_player(ui, player);
 
-    ui_show(ui);
     gtk_main();
 
-    playlist_free(playlist);
-    player_free(player);
     ui_free(ui);
+    player_free(player);
+    playlist_free(playlist);
 
     return 0;
 }
