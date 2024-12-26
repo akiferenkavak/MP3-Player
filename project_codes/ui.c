@@ -2,8 +2,6 @@
 #include "ui.h"
 #include "player.h"
 
-void ui_update_current_song(UI *ui, const char *song_name);
-
 static void on_play_button_clicked(GtkWidget *button, gpointer user_data) {
     UI *ui = (UI *)user_data;
     Player *player = ui->player;
@@ -24,6 +22,14 @@ static void on_next_button_clicked(GtkWidget *button, gpointer user_data) {
     UI *ui = (UI *)user_data;
     Player *player = ui->player;
     player_next(player);
+    const char *current_song = playlist_get_current_song(player->playlist);
+    ui_update_current_song(ui, current_song);
+}
+
+static void on_previous_button_clicked(GtkWidget *button, gpointer user_data) {
+    UI *ui = (UI *)user_data;
+    Player *player = ui->player;
+    player_previous(player);
     const char *current_song = playlist_get_current_song(player->playlist);
     ui_update_current_song(ui, current_song);
 }
@@ -49,12 +55,14 @@ UI* ui_new() {
     ui->play_button = gtk_button_new_with_label("Play");
     ui->stop_button = gtk_button_new_with_label("Stop");
     ui->next_button = gtk_button_new_with_label("Next");
-    ui->quit_button = gtk_button_new_with_label("Quit"); // Quit butonu
+    ui->previous_button = gtk_button_new_with_label("Previous");
+    ui->quit_button = gtk_button_new_with_label("Quit"); // Quit button
     ui->current_song_label = gtk_label_new("No song playing");
 
     gtk_box_pack_start(GTK_BOX(box), ui->play_button, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box), ui->stop_button, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box), ui->next_button, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(box), ui->previous_button, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box), ui->quit_button, TRUE, TRUE, 0); // Quit butonunu ekle
     gtk_box_pack_start(GTK_BOX(box), ui->current_song_label, TRUE, TRUE, 0);
 
@@ -70,6 +78,7 @@ void ui_set_player(UI *ui, Player *player) {
     g_signal_connect(ui->play_button, "clicked", G_CALLBACK(on_play_button_clicked), ui);
     g_signal_connect(ui->stop_button, "clicked", G_CALLBACK(on_stop_button_clicked), ui);
     g_signal_connect(ui->next_button, "clicked", G_CALLBACK(on_next_button_clicked), ui);
+    g_signal_connect(ui->previous_button, "clicked", G_CALLBACK(on_previous_button_clicked), ui);
     g_signal_connect(ui->quit_button, "clicked", G_CALLBACK(on_quit_button_clicked), NULL); // Quit butonunu bağla
 }
 

@@ -9,7 +9,8 @@ typedef struct {
     GtkWidget *play_button;
     GtkWidget *stop_button;
     GtkWidget *next_button;
-    GtkWidget *quit_button; // Quit butonu
+    GtkWidget *previous_button;
+    GtkWidget *quit_button; // Quit button
     GtkWidget *current_song_label; // for showing the current song
     Player *player;
 } UI;

@@ -23,6 +23,12 @@ const char* playlist_get_next_song(Playlist *playlist) {
     return playlist->songs[playlist->current_index];
 }
 
+const char* playlist_get_previous_song(Playlist *playlist) {
+    if (playlist->count == 0) return NULL;
+    playlist->current_index = (playlist->current_index - 1 + playlist->count) % playlist->count;
+    return playlist->songs[playlist->current_index];
+}
+
 const char* playlist_get_current_song(Playlist *playlist) {
     if (playlist->count == 0) return NULL;
     return playlist->songs[playlist->current_index];
