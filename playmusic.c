@@ -29,7 +29,7 @@ void on_stop_button_clicked(GtkWidget *button, gpointer user_data) {
     }
 
     // Çalmayı durdur
-    gst_element_set_state(pipeline, GST_STATE_NULL);
+    gst_element_set_state(pipeline, GST_STATE_PAUSED);
     g_print("Stopped playback.\n");
 }
 
