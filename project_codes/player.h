@@ -15,6 +15,7 @@ void player_set_playlist(Player *player, Playlist *playlist);
 void player_play(Player *player);
 void player_stop(Player *player);
 void player_next(Player *player);
+void player_previous(Player *player);
 void player_free(Player *player);
 const char* playlist_get_current_song(Playlist *playlist);
 const char* playlist_get_next_song(Playlist *playlist);

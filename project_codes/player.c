@@ -7,7 +7,7 @@ Player* player_new() {
         g_printerr("Failed to allocate memory for Player\n");
         return NULL;
     }
-    player->pipeline = gst_element_factory_make("playbin", "playbin");
+    player->pipeline = gst_element_factory_make("playbin", "playbin"); // set the pipeline as playbin element named playbin
     if (!player->pipeline) {
         g_printerr("Failed to create pipeline\n");
         free(player);
@@ -23,7 +23,7 @@ void player_set_playlist(Player *player, Playlist *playlist) {
 
 void player_play(Player *player) {
     const char *current_song = playlist_get_current_song(player->playlist);
-    g_object_set(player->pipeline, "uri", current_song, NULL);
+    g_object_set(player->pipeline, "uri", current_song, NULL); //set the uri for playbin
     gst_element_set_state(player->pipeline, GST_STATE_PLAYING);
     player->is_playing = TRUE;
 }
@@ -37,6 +37,14 @@ void player_next(Player *player) {
     gst_element_set_state(player->pipeline, GST_STATE_NULL);
     const char *next_song = playlist_get_next_song(player->playlist);
     g_object_set(player->pipeline, "uri", next_song, NULL);
+    gst_element_set_state(player->pipeline, GST_STATE_PLAYING);
+    player->is_playing = TRUE;
+}
+
+void player_previous(Player *player) {
+    gst_element_set_state(player->pipeline, GST_STATE_NULL);
+    const char *previous_song = playlist_get_previous_song(player->playlist);
+    g_object_set(player->pipeline, "uri", previous_song, NULL);
     gst_element_set_state(player->pipeline, GST_STATE_PLAYING);
     player->is_playing = TRUE;
 }
